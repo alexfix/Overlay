@@ -30,69 +30,82 @@
 </style>
 <script type="text/javascript">
 $.fn.overlay = function(overlay) {
-var def = {
-	defcss: {
-		backgroundColor: '#dedede',
-		padding: '30px 20px 20px',
-		position: 'absolute',
-		zIndex: '2',
-		overflow: 'auto',
-		wordWrap: 'break-word',
-		width: 'auto',
-		height: 'auto',
-	},
-	defconf: {
-		context: 'fixed',
-		close: 'overlay-close',
-		wrap: 'overlay-wrap',
-		target: 'overlay',
-		fullblock: 'full',
-		opened: 'false'
-	}
-}
-$.fn.conditions = function(conditions) {
-	$('[overlay]').click(function() {
-		var a = $(this);
-		self.checking(a);
-		return a
-	});
-}
-if (overlay.defconf.context == 'fluid') {def.defcss.width = '80%'} else if (overlay.defconf.context == 'fit') {def.defcss.width = '100%', def.defcss.height = '100%'} else {def.defcss.width = 'auto'}
-var win = $(window),
-self = this,
-opened,
-opts = $.extend(def.defcss, overlay.defcss),
-opts2 = $.extend(def.defconf, overlay.defconf);
-$('body').append('<div class="'+opts2.wrap+'"/>');
-$('['+opts2.fullblock+']').hide().addClass('overlay-content').css(opts);
-$.extend(self, opts2, {
-	open: function(g,opened) {
-		var over = $('['+opts2.fullblock+'='+g.attr(opts2.target)+']');
-		over.css({
-			width: opts2.width,
-			left: (win.width() - over.outerWidth())/2,
-			top: (win.height() - over.outerHeight())/2
-			})
-		.append('<div class="'+opts2.close+'"/>').show();
-		$('.'+opts2.wrap+'').toggle();
-		var opened = true;		
-	},
-	close: function(opened) {
-		$('.overlay-content, .overlay-wrap').hide();
-		$('.overlay-close').remove();
-		var opened = false;
-	},
-	checking: function(a,opened) {
-		if (opened == (false || undefined) ) {
-			self.open(a);
-		}
-		else {
-			self.close();
-		}
-	}
-});
+    var def = {
+        defcss: {
+            backgroundColor: '#dedede',
+            padding: '30px 20px 20px',
+            position: 'absolute',
+            zIndex: '2',
+            overflow: 'auto',
+            wordWrap: 'break-word',
+            width: 'auto',
+            height: 'auto',
+        },
+        defconf: {
+            context: 'fixed',
+            close: 'overlay-close',
+            wrap: 'overlay-wrap',
+            target: 'overlay',
+            fullblock: 'full',
+            opened: 'false'
+        }
+    }
 
+    $.fn.conditions = function(conditions) {
+        $('[overlay]').click(function() {
+            var a = $(this);
+            self.checking(a);
+            return a
+        });
+    }
 
+    if (overlay.defconf.context == 'fluid') {
+        def.defcss.width = '80%'
+    } else if (overlay.defconf.context == 'fit') {
+        def.defcss.width = '100%', 
+        def.defcss.height = '100%'
+    } else {
+        def.defcss.width = 'auto'
+    }
+
+    var win = $(window),
+        self = this,
+        opened,
+        opts = $.extend(def.defcss, overlay.defcss),
+        opts2 = $.extend(def.defconf, overlay.defconf);
+
+    $('body').append('<div class="'+opts2.wrap+'"/>');
+    $('['+opts2.fullblock+']').hide().addClass('overlay-content').css(opts);
+
+    $.extend(self, opts2, {
+        open: function(g,opened) {
+            var over = $('['+opts2.fullblock+'='+g.attr(opts2.target)+']');
+
+            over.css({
+                width: opts2.width,
+                left: (win.width() - over.outerWidth())/2,
+                top: (win.height() - over.outerHeight())/2
+            }).append('<div class="'+opts2.close+'"/>').show();
+
+            $('.'+opts2.wrap+'').toggle();
+
+            var opened = true;		
+        },
+        close: function(opened) {
+            $('.overlay-content, .overlay-wrap').hide();
+            $('.overlay-close').remove();
+
+            var opened = false;
+        },
+        checking: function(a,opened) {
+            if (opened == (false || undefined) ) {
+                self.open(a);
+            }
+            else {
+                self.close();
+            }
+        }
+    });
 }
 
 $(function() {
