@@ -30,6 +30,7 @@
 </style>
 <script type="text/javascript">
 $.fn.overlay = function(overlay) {
+$(function() {
     var def = {
         defcss: {
             backgroundColor: '#dedede',
@@ -47,16 +48,9 @@ $.fn.overlay = function(overlay) {
             wrap: 'overlay-wrap',
             target: 'overlay',
             fullblock: 'full',
-            opened: 'false'
+            opened: false,
+            conditions: xui()
         }
-    }
-
-    $.fn.conditions = function(conditions) {
-        $('[overlay]').click(function() {
-            var a = $(this);
-            self.checking(a);
-            return a
-        });
     }
 
     if (overlay.defconf.context == 'fluid') {
@@ -76,36 +70,36 @@ $.fn.overlay = function(overlay) {
 
     $('body').append('<div class="'+opts2.wrap+'"/>');
     $('['+opts2.fullblock+']').hide().addClass('overlay-content').css(opts);
-
     $.extend(self, opts2, {
         open: function(g,opened) {
             var over = $('['+opts2.fullblock+'='+g.attr(opts2.target)+']');
-
             over.css({
                 width: opts2.width,
                 left: (win.width() - over.outerWidth())/2,
                 top: (win.height() - over.outerHeight())/2
             }).append('<div class="'+opts2.close+'"/>').show();
 
-            $('.'+opts2.wrap+'').toggle();
-
-            var opened = true;		
+            $('.'+opts.wrap+'').toggle();
+            self.opened = true;
+            return opened
         },
         close: function(opened) {
             $('.overlay-content, .overlay-wrap').hide();
             $('.overlay-close').remove();
-
-            var opened = false;
-        },
-        checking: function(a,opened) {
-            if (opened == (false || undefined) ) {
-                self.open(a);
-            }
-            else {
-                self.close();
-            }
+            self.opened = false;
         }
     });
+function xui() {
+    $('[overlay]').click(function() {
+        return checking($(this),self.opened)
+        function checking(a,opened) {
+            (opened == false) ? self.open(a,opened) : self.close(opened);
+        }
+    });
+}
+
+
+});
 }
 
 $(function() {
@@ -117,7 +111,6 @@ $(function() {
 			context: 'fluid'
 		}
 	});
-	$(this).conditions();
 });
 </script>
 <h1 overlay="popi">Click me1</h1>
@@ -128,7 +121,7 @@ $(function() {
 </div>
 <h1 overlay="popi1">Click me2</h1>
 <div full="popi1">
-	<img src="/images/offers/2012/4/966.jpg" alt="">
+	<img src="" alt="">
 </div>
 </body>
 </html>
